@@ -1,6 +1,6 @@
 import {expect, expectRevert, setupContract} from '../helpers'
 
-describe('MY_PSP22', () => {
+describe('USD_TOKEN', () => {
     async function setup() {
         return setupContract('usd_token', 'new', '1000')
     }

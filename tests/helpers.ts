@@ -78,3 +78,7 @@ export const expectRevert = <T>(promise: Promise<T>, errorMessage: string | Reco
             }
         })
 }
+
+export const fromSigner = (contract: Contract, address: string): Contract => {
+    return patchContractMethods(contract.connect(address))
+}

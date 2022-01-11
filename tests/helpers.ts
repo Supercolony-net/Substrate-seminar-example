@@ -58,16 +58,6 @@ export const patchContractMethods = (contract: Contract): Contract => {
     return contract
 }
 
-const patchMethods = (object) => {
-    for (const prop in object) {
-        if (prop.includes(',')) {
-            const selectors = prop.split(',')
-            const method = selectors[selectors.length - 1]
-            object[method] = object[prop]
-        }
-    }
-}
-
 export const expectRevert = <T>(promise: Promise<T>, errorMessage: string | Record<string, any> = '') => {
     return promise
         .then(() => expect.fail('Should be reverted.'))

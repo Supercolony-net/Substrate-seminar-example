@@ -22,7 +22,7 @@ pub struct WrappedPSP22Data {
 declare_storage_trait!(WrappedPSP22Storage, WrappedPSP22Data);
 
 #[brush::wrapper]
-pub type WrappedPSP22Ref = dyn WrappedPSP22 + PSP22;
+pub type WrappedPSP22Ref = dyn PSP22;
 
 #[brush::trait_definition]
 pub trait WrappedPSP22: PSP22 + WrappedPSP22Storage + PSP22Internal {

@@ -34,8 +34,7 @@ pub mod wrapped_usd {
     impl WrappedPSP22 for WrappedUsd {
         #[ink(message)]
         fn deposit_for(&mut self, account: AccountId, amount: Balance) -> Result<(), PSP22Error> {
-            PSP22Ref::transfer_from(
-                &self.wrapped_psp22,
+            self.wrapped().transfer_from(
                 Self::env().caller(),
                 Self::env().account_id(),
                 amount,
@@ -47,7 +46,7 @@ pub mod wrapped_usd {
         #[ink(message)]
         fn withdraw_to(&mut self, account: AccountId, amount: Balance) -> Result<(), PSP22Error> {
             self._burn(Self::env().caller(), amount)?;
-            PSP22Ref::transfer(&self.wrapped_psp22, account, amount, Vec::<u8>::new())
+            self.wrapped().transfer(account, amount, Vec::<u8>::new())
         }
     }
 
@@ -58,6 +57,10 @@ pub mod wrapped_usd {
                 wrapped_psp22: psp22_account,
                 psp22: Default::default(),
             }
+        }
+
+        fn wrapped(&self) -> &PSP22Ref {
+            &self.wrapped_psp22
         }
     }
 }

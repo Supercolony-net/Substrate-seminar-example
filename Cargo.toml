@@ -1,5 +1,0 @@
-[workspace]
-members = [
-    "contracts/usd_token",
-    "contracts/wrapped_usd",
-]

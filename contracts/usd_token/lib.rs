@@ -4,7 +4,7 @@
 #[brush::contract]
 pub mod usd_token {
     use brush::modifiers;
-    use wrapper::traits::usd_token::*;
+    use wrapper::impls::usd_token::*;
 
     #[ink(storage)]
     #[derive(Default, PSP22Storage, PausableStorage)]

@@ -3,7 +3,7 @@
 
 #[brush::contract]
 pub mod wrapped_usd {
-    use wrapper::traits::wrapped_usd::*;
+    use wrapper::impls::wrapped_usd::*;
 
     #[ink(storage)]
     #[derive(Default, PSP22Storage)]

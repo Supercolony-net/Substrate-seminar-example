@@ -1,4 +1,4 @@
-pub use brush::contracts::{
+pub use brush::contracts::traits::{
     pausable::*,
     psp22::*,
 };

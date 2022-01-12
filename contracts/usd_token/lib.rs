@@ -3,13 +3,8 @@
 
 #[brush::contract]
 pub mod usd_token {
-    use brush::{
-        contracts::{
-            pausable::*,
-            psp22::*,
-        },
-        modifiers,
-    };
+    use brush::modifiers;
+    use wrapper::traits::usd_token::*;
 
     #[ink(storage)]
     #[derive(Default, PSP22Storage, PausableStorage)]
@@ -36,6 +31,9 @@ pub mod usd_token {
     }
 
     impl Pausable for Contract {}
+
+    // It is need only to verify during compilation that `Contract` implements `Pausable` and `PSP22`
+    impl UsdToken for Contract {}
 
     impl Contract {
         #[ink(constructor)]

@@ -3,60 +3,41 @@
 
 #[brush::contract]
 pub mod wrapped_usd {
-    use brush::{
-        contracts::psp22::*,
-        traits::InkStorage,
-    };
-    use ink_prelude::vec::Vec;
-
-    #[brush::trait_definition]
-    pub trait WrappedPSP22: PSP22 {
-        /// Allow a user to deposit `amount` of underlying tokens and mint `amount` of the wrapped tokens to `account`
-        #[ink(message)]
-        fn deposit_for(&mut self, account: AccountId, amount: Balance) -> Result<(), PSP22Error>;
-
-        /// Allow a user to burn `amount` of wrapped tokens and withdraw the corresponding number of underlying tokens to `account`
-        #[ink(message)]
-        fn withdraw_to(&mut self, account: AccountId, amount: Balance) -> Result<(), PSP22Error>;
-    }
+    use wrapper::traits::wrapped_usd::*;
 
     #[ink(storage)]
     #[derive(Default, PSP22Storage)]
     pub struct Contract {
         #[PSP22StorageField]
         psp22: PSP22Data,
-
-        wrapped_psp22: AccountId,
+        wrapped_psp22: WrappedPSP22Data,
     }
+
+    // impl WrappedPSP22Storage for Contract {
+    //     fn get(&self) -> &WrappedPSP22Data {
+    //         &self.wrapped_psp22
+    //     }
+    //
+    //     fn get_mut(&mut self) -> &mut WrappedPSP22Data {
+    //         &mut self.wrapped_psp22
+    //     }
+    // }
+    // The impl section above can be generated via `impl_storage_trait` macro
+    brush::impl_storage_trait!(WrappedPSP22Storage, Contract, wrapped_psp22, WrappedPSP22Data);
 
     impl PSP22 for Contract {}
 
-    impl WrappedPSP22 for Contract {
-        #[ink(message)]
-        fn deposit_for(&mut self, account: AccountId, amount: Balance) -> Result<(), PSP22Error> {
-            self.wrapped()
-                .transfer_from(Self::env().caller(), Self::env().account_id(), amount, Vec::<u8>::new())?;
-            self._mint(account, amount)
-        }
-
-        #[ink(message)]
-        fn withdraw_to(&mut self, account: AccountId, amount: Balance) -> Result<(), PSP22Error> {
-            self._burn(Self::env().caller(), amount)?;
-            self.wrapped().transfer(account, amount, Vec::<u8>::new())
-        }
-    }
+    impl WrappedPSP22 for Contract {}
 
     impl Contract {
         #[ink(constructor)]
         pub fn new(psp22_account: AccountId) -> Self {
             Self {
-                wrapped_psp22: psp22_account,
+                wrapped_psp22: WrappedPSP22Data {
+                    wrapped_account: psp22_account,
+                },
                 psp22: Default::default(),
             }
-        }
-
-        fn wrapped(&self) -> &PSP22Ref {
-            &self.wrapped_psp22
         }
     }
 }
